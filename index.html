@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+  <!-- Dòng thông tin Coder ở góc dưới bên phải -->
+<div class="coder-credit">
+  coder:KENR_VN
+</div>
+
+<style>
+  .coder-credit {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    color: #000000;                       /* Chữ màu trắng */
+    font-family: monospace, sans-serif;   /* Font kiểu lập trình */
+    font-size: 20spx;
+    padding: 6px 10px;
+    border-radius: 6px;
+    z-index: 9999;                        /* Đảm bảo luôn nằm trên các thành phần khác */
+    pointer-events: none;                 /* Tránh che mất các nút click phía dưới nếu có */
+  }
+</style>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Music Player - Soft Pink Aesthetic</title>

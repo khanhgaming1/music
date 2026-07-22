@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music Player - Soft Pink Aesthetic</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Custom Pink Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(251, 207, 232, 0.2);
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #f472b6;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #ec4899;
+    }
+
+    /* Animation xoay đĩa CD */
+    @keyframes spin-cd {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-cd-spin {
+      animation: spin-cd 10s linear infinite;
+    }
+    .paused-animation {
+      animation-play-state: paused !important;
+    }
+
+    /* Hiệu ứng trượt mượt viền hồng căn chỉnh hoàn hảo */
+    .active-indicator {
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), height 0.25s ease, opacity 0.2s ease;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-pink-200 via-pink-100 to-rose-200 flex items-center justify-center p-4">
+
+  <!-- Main Music Player Dashboard -->
+  <main class="w-full max-w-xs aspect-[3/4] h-[540px] bg-white/75 backdrop-blur-md rounded-3xl p-4 shadow-2xl shadow-pink-300/40 border border-white/80 relative flex flex-col justify-between overflow-hidden">
+    
+    <!-- Header -->
+    <div class="flex items-center justify-between relative pt-1 px-1">
+      <div class="flex items-center gap-1.5">
+        <i data-lucide="disc-3" id="header-disc" class="w-4 h-4 text-pink-500"></i>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-pink-600">MUSIC PLAYER</span>
+      </div>
+      <!-- Nút đóng X -->
+      <button class="w-6 h-6 rounded-full bg-pink-500 text-white flex items-center justify-center hover:bg-pink-600 active:scale-90 transition-all shadow-md">
+        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+      </button>
+    </div>
+
+    <!-- Ảnh đĩa CD hình tròn xoay liên tục -->
+    <div id="swipe-zone" class="relative w-36 h-36 mx-auto my-1 shrink-0 flex items-center justify-center cursor-grab active:cursor-grabbing">
+      <div id="cd-disc" class="relative w-36 h-36 rounded-full overflow-hidden shadow-xl shadow-pink-300/60 border-4 border-white/90 animate-cd-spin paused-animation transition-transform duration-200">
+        <img 
+          id="cover-art"
+          src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop" 
+          alt="Cover Art" 
+          class="w-full h-full object-cover pointer-events-none select-none"
+        />
+        <div class="absolute inset-0 m-auto w-7 h-7 bg-white/90 rounded-full border-2 border-pink-200 shadow-inner flex items-center justify-center pointer-events-none">
+          <div class="w-2.5 h-2.5 bg-pink-300/50 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thông tin bài hát -->
+    <div class="text-center mb-1">
+      <h1 id="song-title" class="text-base font-bold text-pink-600 tracking-tight truncate px-2">
+        Track 01
+      </h1>
+      <p id="artist-name" class="text-[11px] font-medium text-pink-400 truncate">Artist 01</p>
+    </div>
+
+    <!-- Thanh tiến trình -->
+    <div class="space-y-1 mb-2 px-1">
+      <div id="progress-bar" class="w-full bg-pink-100 h-2 rounded-full overflow-hidden cursor-pointer relative group transition-all">
+        <div id="progress-fill" class="bg-gradient-to-r from-pink-400 to-rose-400 h-full w-0 rounded-full relative">
+          <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-pink-500 rounded-full shadow scale-0 group-hover:scale-100 transition-transform"></div>
+        </div>
+      </div>
+      <div class="flex justify-between text-[10px] font-semibold text-pink-400">
+        <span id="current-time">0:00</span>
+        <span id="duration-time">0:00</span>
+      </div>
+    </div>
+
+    <!-- Nút điều khiển -->
+    <div class="flex items-center justify-center gap-5 mb-3">
+      <button id="rewind-btn" title="Lùi 5s" class="text-pink-400 hover:text-pink-600 active:scale-85 transition-all p-1 flex flex-col items-center">
+        <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+        <span class="text-[8px] font-bold -mt-1">5s</span>
+      </button>
+
+      <button id="play-btn" class="w-11 h-11 rounded-full bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center shadow-lg shadow-pink-300 hover:scale-105 active:scale-90 transition-all">
+        <i data-lucide="play" class="w-5 h-5 fill-current translate-x-0.5"></i>
+      </button>
+
+      <button id="forward-btn" title="Tiến 5s" class="text-pink-400 hover:text-pink-600 active:scale-85 transition-all p-1 flex flex-col items-center">
+        <i data-lucide="rotate-cw" class="w-5 h-5"></i>
+        <span class="text-[8px] font-bold -mt-1">5s</span>
+      </button>
+    </div>
+
+    <!-- Danh sách nhạc với Khung viền hồng đã căn chỉnh tuyệt đối -->
+    <div id="playlist-container" class="relative flex-1 overflow-y-auto pr-1 space-y-1.5 custom-scrollbar min-h-0">
+      
+      <!-- Viền hồng di chuyển (Đã chỉnh top-0, left-0, w-full chuẩn xác) -->
+      <div id="active-indicator" class="active-indicator absolute top-0 left-0 w-full bg-pink-100/90 border-2 border-pink-400 rounded-xl pointer-events-none shadow-sm z-0 opacity-0"></div>
+
+      <!-- Item 1 -->
+      <div class="track-item relative z-10 flex items-center justify-between gap-2.5 px-2.5 py-1.5 rounded-xl active:scale-[0.98] transition-all cursor-pointer"
+           data-title="Thích Anh Cơ" data-artist="Hằng ssi, Aries tis" data-cover="https://photo-resize-zmp3.zmdcdn.me/w256_r1x1_jpeg/cover/3/b/a/9/3ba925670cb90d31e7f1f78fc4ccfe47.jpg">
+        <div class="flex items-center gap-2.5 min-w-0 flex-1 pointer-events-none">
+          <img src="https://photo-resize-zmp3.zmdcdn.me/w256_r1x1_jpeg/cover/3/b/a/9/3ba925670cb90d31e7f1f78fc4ccfe47.jpg" class="w-8 h-8 rounded-lg object-cover shrink-0" />
+          <div class="min-w-0 flex-1">
+            <p class="text-[11px] font-bold text-pink-600 truncate leading-snug">Thích Anh Cơ</p>
+            <p class="text-[9px] font-medium text-pink-400 truncate">Hằng ssi, Aries tis</p>
+          </div>
+        </div>
+        <i data-lucide="volume-2" class="volume-icon w-3.5 h-3.5 text-pink-500 animate-pulse shrink-0 hidden"></i>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="track-item relative z-10 flex items-center justify-between gap-2.5 px-2.5 py-1.5 rounded-xl active:scale-[0.98] transition-all cursor-pointer"
+           data-title="Lỡ Say Bye Là Bye" data-artist="Lemese x Changg" data-cover="https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=150&auto=format&fit=crop">
+        <div class="flex items-center gap-2.5 min-w-0 flex-1 pointer-events-none">
+          <img src="https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=150&auto=format&fit=crop" class="w-8 h-8 rounded-lg object-cover shrink-0" />
+          <div class="min-w-0 flex-1">
+            <p class="text-[11px] font-bold text-pink-600 truncate leading-snug">Lỡ Say Bye Là Bye</p>
+            <p class="text-[9px] font-medium text-pink-400 truncate">Lemese x Changg</p>
+          </div>
+        </div>
+        <i data-lucide="volume-2" class="volume-icon w-3.5 h-3.5 text-pink-500 animate-pulse shrink-0 hidden"></i>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="track-item relative z-10 flex items-center justify-between gap-2.5 px-2.5 py-1.5 rounded-xl active:scale-[0.98] transition-all cursor-pointer"
+           data-title="Thiệp Hồng Cho Em" data-artist="Nhiều Ca Sĩ" data-cover="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=150&auto=format&fit=crop">
+        <div class="flex items-center gap-2.5 min-w-0 flex-1 pointer-events-none">
+          <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=150&auto=format&fit=crop" class="w-8 h-8 rounded-lg object-cover shrink-0" />
+          <div class="min-w-0 flex-1">
+            <p class="text-[11px] font-bold text-pink-600 truncate leading-snug">Thiệp Hồng Cho Em</p>
+            <p class="text-[9px] font-medium text-pink-400 truncate">Nhiều Ca Sĩ</p>
+          </div>
+        </div>
+        <i data-lucide="volume-2" class="volume-icon w-3.5 h-3.5 text-pink-500 animate-pulse shrink-0 hidden"></i>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="track-item relative z-10 flex items-center justify-between gap-2.5 px-2.5 py-1.5 rounded-xl active:scale-[0.98] transition-all cursor-pointer"
+           data-title="Chút Nắng Mùa Thu" data-artist="Acoustic Chill" data-cover="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=150&auto=format&fit=crop">
+        <div class="flex items-center gap-2.5 min-w-0 flex-1 pointer-events-none">
+          <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=150&auto=format&fit=crop" class="w-8 h-8 rounded-lg object-cover shrink-0" />
+          <div class="min-w-0 flex-1">
+            <p class="text-[11px] font-bold text-pink-600 truncate leading-snug">Chút Nắng Mùa Thu</p>
+            <p class="text-[9px] font-medium text-pink-400 truncate">Acoustic Chill</p>
+          </div>
+        </div>
+        <i data-lucide="volume-2" class="volume-icon w-3.5 h-3.5 text-pink-500 animate-pulse shrink-0 hidden"></i>
+      </div>
+
+      <!-- Item 5 -->
+      <div class="track-item relative z-10 flex items-center justify-between gap-2.5 px-2.5 py-1.5 rounded-xl active:scale-[0.98] transition-all cursor-pointer"
+           data-title="Chờ Anh Nhé" data-artist="Hoàng Dũng" data-cover="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=150&auto=format&fit=crop">
+        <div class="flex items-center gap-2.5 min-w-0 flex-1 pointer-events-none">
+          <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=150&auto=format&fit=crop" class="w-8 h-8 rounded-lg object-cover shrink-0" />
+          <div class="min-w-0 flex-1">
+            <p class="text-[11px] font-bold text-pink-600 truncate leading-snug">Chờ Anh Nhé</p>
+            <p class="text-[9px] font-medium text-pink-400 truncate">Hoàng Dũng</p>
+          </div>
+        </div>
+        <i data-lucide="volume-2" class="volume-icon w-3.5 h-3.5 text-pink-500 animate-pulse shrink-0 hidden"></i>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    const audioPlayer = new Audio();
+    
+    const playlistContainer = document.getElementById('playlist-container');
+    const indicator = document.getElementById('active-indicator');
+    const trackItems = document.querySelectorAll('.track-item');
+    
+    const songTitle = document.getElementById('song-title');
+    const artistName = document.getElementById('artist-name');
+    const coverArt = document.getElementById('cover-art');
+    const cdDisc = document.getElementById('cd-disc');
+    const playBtn = document.getElementById('play-btn');
+    const headerDisc = document.getElementById('header-disc');
+
+    const progressBar = document.getElementById('progress-bar');
+    const progressFill = document.getElementById('progress-fill');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationTimeEl = document.getElementById('duration-time');
+
+    let currentTrackIndex = 0;
+
+    function getAudioFileName(index) {
+      const number = String(index + 1).padStart(2, '0');
+      return `music_${number}.mp3`;
+    }
+
+    function updatePlayStateUI() {
+      if (audioPlayer.paused) {
+        playBtn.innerHTML = '<i data-lucide="play" class="w-5 h-5 fill-current translate-x-0.5"></i>';
+        headerDisc.classList.remove('animate-spin-slow');
+        cdDisc.classList.add('paused-animation');
+      } else {
+        playBtn.innerHTML = '<i data-lucide="pause" class="w-5 h-5 fill-current"></i>';
+        headerDisc.classList.add('animate-spin-slow');
+        cdDisc.classList.remove('paused-animation');
+      }
+      lucide.createIcons();
+    }
+
+    // Xử lý tính toán vị trí viền hồng chuẩn xác tuyệt đối
+    function setActiveTrack(index, shouldPlay = true) {
+      if (index < 0 || index >= trackItems.length) return;
+      
+      currentTrackIndex = index;
+      const element = trackItems[index];
+
+      // Đặt offsetTop chính xác của item so với container
+      const targetTop = element.offsetTop;
+      const targetHeight = element.offsetHeight;
+
+      indicator.style.transform = `translateY(${targetTop}px)`;
+      indicator.style.height = `${targetHeight}px`;
+      indicator.style.opacity = '1';
+
+      // Cập nhật icon loa nhấp nháy
+      trackItems.forEach((item, idx) => {
+        const icon = item.querySelector('.volume-icon');
+        if (idx === index) {
+          icon?.classList.remove('hidden');
+        } else {
+          icon?.classList.add('hidden');
+        }
+      });
+
+      // Cập nhật thông tin UI
+      songTitle.textContent = element.getAttribute('data-title');
+      artistName.textContent = element.getAttribute('data-artist');
+      coverArt.src = element.getAttribute('data-cover');
+
+      const audioPath = getAudioFileName(index);
+      audioPlayer.src = audioPath;
+
+      if (shouldPlay) {
+        audioPlayer.play().then(() => {
+          updatePlayStateUI();
+        }).catch(err => {
+          console.log("Cần tương tác để phát nhạc:", err);
+          updatePlayStateUI();
+        });
+      }
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (!audioPlayer.src) {
+        setActiveTrack(0, true);
+        return;
+      }
+
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+      } else {
+        audioPlayer.pause();
+      }
+      updatePlayStateUI();
+    });
+
+    document.getElementById('rewind-btn').addEventListener('click', () => {
+      if (audioPlayer.duration) {
+        audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 5);
+      }
+    });
+
+    document.getElementById('forward-btn').addEventListener('click', () => {
+      if (audioPlayer.duration) {
+        audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 5);
+      }
+    });
+
+    trackItems.forEach((item, index) => {
+      item.addEventListener('click', () => {
+        setActiveTrack(index, true);
+      });
+    });
+
+    audioPlayer.addEventListener('timeupdate', () => {
+      if (!audioPlayer.duration) return;
+      const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+      progressFill.style.width = `${progressPercent}%`;
+
+      currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+      durationTimeEl.textContent = formatTime(audioPlayer.duration);
+    });
+
+    audioPlayer.addEventListener('ended', () => {
+      const nextIndex = (currentTrackIndex + 1) % trackItems.length;
+      setActiveTrack(nextIndex, true);
+    });
+
+    progressBar.addEventListener('click', (e) => {
+      if (!audioPlayer.duration) return;
+      const rect = progressBar.getBoundingClientRect();
+      const clickX = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      const percentage = Math.max(0, Math.min(1, clickX / rect.width));
+      audioPlayer.currentTime = percentage * audioPlayer.duration;
+    });
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "0:00";
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        setActiveTrack(0, false);
+      }, 100);
+    });
+  </script>
+</body>
+</html>

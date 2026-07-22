@@ -1,40 +1,38 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <!-- Dòng thông tin Coder ở góc dưới bên phải -->
-<div class="coder-credit">
-  coder:KENR_VN
-</div>
-
-<style>
-  .coder-credit {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    color: #000000;                       /* Chữ màu trắng */
-    font-family: monospace, sans-serif;   /* Font kiểu lập trình */
-    font-size: 20spx;
-    padding: 6px 10px;
-    border-radius: 6px;
-    z-index: 9999;                        /* Đảm bảo luôn nằm trên các thành phần khác */
-    pointer-events: none;                 /* Tránh che mất các nút click phía dưới nếu có */
-  }
-</style>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Music Player - Soft Pink Aesthetic</title>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       user-select: none;
       -webkit-user-select: none;
     }
+
+    /* Dòng thông tin Coder */
+    /* Dòng thông tin Coder */
+.coder-credit {
+  position: fixed;
+  bottom: 8px; /* Giảm khoảng cách từ đáy xuống sát góc (mặc định cũ là 20px) */
+  right: 8px;  /* Giảm khoảng cách từ lề phải xuống sát góc (mặc định cũ là 20px) */
+  color: #000000;
+  font-family: monospace, sans-serif;
+  font-size: 13px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  z-index: 9999;
+  pointer-events: none;
+}
 
     /* Custom Pink Scrollbar */
     .custom-scrollbar::-webkit-scrollbar {
@@ -64,7 +62,7 @@
       animation-play-state: paused !important;
     }
 
-    /* Hiệu ứng trượt mượt viền hồng căn chỉnh hoàn hảo */
+    /* Hiệu ứng trượt viền hồng */
     .active-indicator {
       transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), height 0.25s ease, opacity 0.2s ease;
       box-sizing: border-box;
@@ -72,6 +70,11 @@
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-pink-200 via-pink-100 to-rose-200 flex items-center justify-center p-4">
+
+  <!-- Dòng thông tin Coder -->
+  <div class="coder-credit">
+    coder:KENR_VN
+  </div>
 
   <!-- Main Music Player Dashboard -->
   <main class="w-full max-w-xs aspect-[3/4] h-[540px] bg-white/75 backdrop-blur-md rounded-3xl p-4 shadow-2xl shadow-pink-300/40 border border-white/80 relative flex flex-col justify-between overflow-hidden">
@@ -82,13 +85,12 @@
         <i data-lucide="disc-3" id="header-disc" class="w-4 h-4 text-pink-500"></i>
         <span class="text-[10px] font-bold uppercase tracking-widest text-pink-600">MUSIC PLAYER</span>
       </div>
-      <!-- Nút đóng X -->
       <button class="w-6 h-6 rounded-full bg-pink-500 text-white flex items-center justify-center hover:bg-pink-600 active:scale-90 transition-all shadow-md">
         <i data-lucide="x" class="w-3.5 h-3.5"></i>
       </button>
     </div>
 
-    <!-- Ảnh đĩa CD hình tròn xoay liên tục -->
+    <!-- Ảnh đĩa CD xoay -->
     <div id="swipe-zone" class="relative w-36 h-36 mx-auto my-1 shrink-0 flex items-center justify-center cursor-grab active:cursor-grabbing">
       <div id="cd-disc" class="relative w-36 h-36 rounded-full overflow-hidden shadow-xl shadow-pink-300/60 border-4 border-white/90 animate-cd-spin paused-animation transition-transform duration-200">
         <img 
@@ -141,13 +143,11 @@
       </button>
     </div>
 
-    <!-- Danh sách nhạc với Khung viền hồng đã căn chỉnh tuyệt đối -->
+    <!-- Danh sách nhạc -->
     <div id="playlist-container" class="relative flex-1 overflow-y-auto pr-1 space-y-1.5 custom-scrollbar min-h-0">
-      
-      <!-- Viền hồng di chuyển (Đã chỉnh top-0, left-0, w-full chuẩn xác) -->
       <div id="active-indicator" class="active-indicator absolute top-0 left-0 w-full bg-pink-100/90 border-2 border-pink-400 rounded-xl pointer-events-none shadow-sm z-0 opacity-0"></div>
 
-      <!-- Item 1 -->
+      <!-- Track Items -->
       <div class="track-item relative z-10 flex items-center justify-between gap-2.5 px-2.5 py-1.5 rounded-xl active:scale-[0.98] transition-all cursor-pointer"
            data-title="Thích Anh Cơ" data-artist="Hằng ssi, Aries tis" data-cover="https://photo-resize-zmp3.zmdcdn.me/w256_r1x1_jpeg/cover/3/b/a/9/3ba925670cb90d31e7f1f78fc4ccfe47.jpg">
         <div class="flex items-center gap-2.5 min-w-0 flex-1 pointer-events-none">
@@ -160,7 +160,6 @@
         <i data-lucide="volume-2" class="volume-icon w-3.5 h-3.5 text-pink-500 animate-pulse shrink-0 hidden"></i>
       </div>
 
-      <!-- Item 2 -->
       <div class="track-item relative z-10 flex items-center justify-between gap-2.5 px-2.5 py-1.5 rounded-xl active:scale-[0.98] transition-all cursor-pointer"
            data-title="Ai Ngoài Anh" data-artist="VSTRA" data-cover="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmhjt05_Y3E6Fxe3kotTY6ZnCbyyrdzKisyrIWM1oBpA&s=10">
         <div class="flex items-center gap-2.5 min-w-0 flex-1 pointer-events-none">
@@ -173,7 +172,6 @@
         <i data-lucide="volume-2" class="volume-icon w-3.5 h-3.5 text-pink-500 animate-pulse shrink-0 hidden"></i>
       </div>
 
-      <!-- Item 3 -->
       <div class="track-item relative z-10 flex items-center justify-between gap-2.5 px-2.5 py-1.5 rounded-xl active:scale-[0.98] transition-all cursor-pointer"
            data-title="Thiệp Hồng Cho Em" data-artist="Nhiều Ca Sĩ" data-cover="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=150&auto=format&fit=crop">
         <div class="flex items-center gap-2.5 min-w-0 flex-1 pointer-events-none">
@@ -186,7 +184,6 @@
         <i data-lucide="volume-2" class="volume-icon w-3.5 h-3.5 text-pink-500 animate-pulse shrink-0 hidden"></i>
       </div>
 
-      <!-- Item 4 -->
       <div class="track-item relative z-10 flex items-center justify-between gap-2.5 px-2.5 py-1.5 rounded-xl active:scale-[0.98] transition-all cursor-pointer"
            data-title="Chút Nắng Mùa Thu" data-artist="Acoustic Chill" data-cover="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=150&auto=format&fit=crop">
         <div class="flex items-center gap-2.5 min-w-0 flex-1 pointer-events-none">
@@ -199,7 +196,6 @@
         <i data-lucide="volume-2" class="volume-icon w-3.5 h-3.5 text-pink-500 animate-pulse shrink-0 hidden"></i>
       </div>
 
-      <!-- Item 5 -->
       <div class="track-item relative z-10 flex items-center justify-between gap-2.5 px-2.5 py-1.5 rounded-xl active:scale-[0.98] transition-all cursor-pointer"
            data-title="Chờ Anh Nhé" data-artist="Hoàng Dũng" data-cover="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=150&auto=format&fit=crop">
         <div class="flex items-center gap-2.5 min-w-0 flex-1 pointer-events-none">
@@ -211,7 +207,6 @@
         </div>
         <i data-lucide="volume-2" class="volume-icon w-3.5 h-3.5 text-pink-500 animate-pulse shrink-0 hidden"></i>
       </div>
-
     </div>
 
   </main>
@@ -220,18 +215,14 @@
     lucide.createIcons();
 
     const audioPlayer = new Audio();
-    
-    const playlistContainer = document.getElementById('playlist-container');
     const indicator = document.getElementById('active-indicator');
     const trackItems = document.querySelectorAll('.track-item');
-    
     const songTitle = document.getElementById('song-title');
     const artistName = document.getElementById('artist-name');
     const coverArt = document.getElementById('cover-art');
     const cdDisc = document.getElementById('cd-disc');
     const playBtn = document.getElementById('play-btn');
     const headerDisc = document.getElementById('header-disc');
-
     const progressBar = document.getElementById('progress-bar');
     const progressFill = document.getElementById('progress-fill');
     const currentTimeEl = document.getElementById('current-time');
@@ -247,24 +238,20 @@
     function updatePlayStateUI() {
       if (audioPlayer.paused) {
         playBtn.innerHTML = '<i data-lucide="play" class="w-5 h-5 fill-current translate-x-0.5"></i>';
-        headerDisc.classList.remove('animate-spin-slow');
         cdDisc.classList.add('paused-animation');
       } else {
         playBtn.innerHTML = '<i data-lucide="pause" class="w-5 h-5 fill-current"></i>';
-        headerDisc.classList.add('animate-spin-slow');
         cdDisc.classList.remove('paused-animation');
       }
       lucide.createIcons();
     }
 
-    // Xử lý tính toán vị trí viền hồng chuẩn xác tuyệt đối
     function setActiveTrack(index, shouldPlay = true) {
       if (index < 0 || index >= trackItems.length) return;
       
       currentTrackIndex = index;
       const element = trackItems[index];
 
-      // Đặt offsetTop chính xác của item so với container
       const targetTop = element.offsetTop;
       const targetHeight = element.offsetHeight;
 
@@ -272,7 +259,6 @@
       indicator.style.height = `${targetHeight}px`;
       indicator.style.opacity = '1';
 
-      // Cập nhật icon loa nhấp nháy
       trackItems.forEach((item, idx) => {
         const icon = item.querySelector('.volume-icon');
         if (idx === index) {
@@ -282,19 +268,17 @@
         }
       });
 
-      // Cập nhật thông tin UI
       songTitle.textContent = element.getAttribute('data-title');
       artistName.textContent = element.getAttribute('data-artist');
       coverArt.src = element.getAttribute('data-cover');
 
-      const audioPath = getAudioFileName(index);
-      audioPlayer.src = audioPath;
+      audioPlayer.src = getAudioFileName(index);
 
       if (shouldPlay) {
         audioPlayer.play().then(() => {
           updatePlayStateUI();
         }).catch(err => {
-          console.log("Cần tương tác để phát nhạc:", err);
+          console.log("Cần tương tác người dùng để phát nhạc:", err);
           updatePlayStateUI();
         });
       }
@@ -305,7 +289,6 @@
         setActiveTrack(0, true);
         return;
       }
-
       if (audioPlayer.paused) {
         audioPlayer.play();
       } else {
@@ -349,7 +332,7 @@
     progressBar.addEventListener('click', (e) => {
       if (!audioPlayer.duration) return;
       const rect = progressBar.getBoundingClientRect();
-      const clickX = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      const clickX = e.clientX - rect.left;
       const percentage = Math.max(0, Math.min(1, clickX / rect.width));
       audioPlayer.currentTime = percentage * audioPlayer.duration;
     });
